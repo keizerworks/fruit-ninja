@@ -1,0 +1,79 @@
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    background: url("images/background_2.png") no-repeat center center;
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    background-position: center;  
+    overflow: hidden;
+}
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+#fruitlogo{
+    display: block;
+    width: 500px;
+    height: 200px;
+    padding-bottom: 100px;
+}
+.options{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 50px;
+    gap: 50px;
+}
+    #singlePlayer{
+        display: block;
+        width: 200px;
+        height: 100;
+        background: none;
+        border: none;
+    
+        img{
+            width: 200px;
+            height: 100;
+            border-radius: 30px;
+            opacity: 0.9;
+        }
+
+        &:hover{
+            width: 300;
+            height: 150;
+            img{
+                width: 300px;
+                height: 150;
+                opacity: 1;
+            }
+        }
+    }
+    #multiPlayer{
+        display: block;
+        background: none;
+        border: none;
+        width: 200px;
+        height: 100;
+        
+    
+        img{
+            width: 200px;
+            height: 100;
+            border-radius: 30px;
+            opacity: 0.9;
+        }
+        &:hover{
+            width: 300;
+            height: 150;
+            img{
+                width: 300px;
+                height: 150;
+                opacity: 1;
+            }
+        }
+        
+        
+    }
