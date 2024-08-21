@@ -96,25 +96,6 @@ function showGameModePopup() {
     .addEventListener("click", startMultiplayer);
 }
 
-function startSingleplayer() {
-  document.getElementById("gameModePopup").style.display = "none";
-  isPlay = true;
-  start.play();
-  loop();
-}
-
-let playerName;
-function startMultiplayer() {
-  document.getElementById("gameModePopup").style.display = "none";
-  // Code to start the multiplayer game (currently ignored)...
-
-  playerName = prompt("Enter your name:");
-  socket = io();
-  socket.emit("join", playerName);
-  showSearchingState();
-  setupMultiplayerListeners();
-}
-
 function showSearchingState() {
   // Hide the game canvas
   cnv.style("display", "none");
@@ -135,88 +116,6 @@ function showSearchingState() {
       showSinglePlayerSuggestion();
     }
   }, 1000);
-}
-
-function showSinglePlayerSuggestion() {
-  // Remove the loading message
-  let loadingMsg = select("#loadingMsg");
-  if (loadingMsg) loadingMsg.remove();
-
-  // Show suggestion message
-  let suggestionMsg = createP(
-    "No player found. Would you like to start a single player game?"
-  );
-  suggestionMsg.style("text-align", "center");
-  suggestionMsg.style("font-size", "24px");
-  suggestionMsg.style("margin-top", "50px");
-
-  // Create buttons
-  let yesBtn = createButton("Yes");
-  yesBtn.mousePressed(() => {
-    suggestionMsg.remove();
-    yesBtn.remove();
-    noBtn.remove();
-    startSinglePlayerGame();
-  });
-
-  let noBtn = createButton("No");
-  noBtn.mousePressed(() => {
-    suggestionMsg.remove();
-    yesBtn.remove();
-    noBtn.remove();
-    showMainMenu();
-  });
-
-  // Center buttons
-  let buttonDiv = createDiv();
-  buttonDiv.style("text-align", "center");
-  buttonDiv.style("margin-top", "20px");
-  yesBtn.parent(buttonDiv);
-  noBtn.parent(buttonDiv);
-}
-
-function setupMultiplayerListeners() {
-  socket.on("playerConnected", (players) => {
-    console.log("Players:", players);
-    if (players.length === 2) {
-      // Two players connected, start the game
-      let loadingMsg = select("#loadingMsg");
-      if (loadingMsg) loadingMsg.remove();
-      cnv.style("display", "block");
-      isPlay = true;
-      score = 0;
-      lives = 3;
-      loop(); // Start the draw loop
-    }
-  });
-
-  socket.on("updateScores", (scores) => {
-    console.log("Scores:", scores);
-  });
-
-  socket.on("updateFruits", (fruits) => {
-    fruit = fruits.map(
-      (f) =>
-        new Fruit(
-          f.x,
-          f.y,
-          f.speed,
-          color(f.color),
-          f.size,
-          fruitsImgs[fruitsList.indexOf(f.name)],
-          slicedFruitsImgs[2 * fruitsList.indexOf(f.name)],
-          slicedFruitsImgs[2 * fruitsList.indexOf(f.name) + 1],
-          f.name
-        )
-    );
-  });
-
-  socket.on("gameOver", (losingPlayerName) => {
-    if (losingPlayerName !== playerName) {
-      // This player wins
-      gameWon();
-    }
-  });
 }
 
 function check() {
@@ -353,4 +252,15 @@ function gameOver() {
   background(bg);
   image(this.gameOverImg, 155, 260, 490, 85);
   lives = 0;
+}
+
+function gameWon() {
+  noLoop();
+  over.play();
+  clear();
+  background(bg);
+  textSize(32);
+  fill(255);
+  textAlign(CENTER, CENTER);
+  text("You Won!", width / 2, height / 2);
 }
