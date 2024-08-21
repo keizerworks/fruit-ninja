@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Fruit Ninja</title>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="./index.css">
 
     <!-- STYLE -->
     <style>
-        body{
+        body {
             text-align: center;
             background: url("images/Background_3.png") no-repeat center center;
-            background-size: cover;   
+            background-size: cover;
         }
     </style>
 
     <!-- FAVICON -->
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+
 
 </head>
 
@@ -30,9 +33,22 @@
     <script type="text/javascript" src="p5/addons/p5.dom.js"></script>
     <script type="text/javascript" src="p5/addons/p5.sound.js"></script>
 
+
+    <div id="gameModePopup" class="popup">
+        <button id="singleplayerBtn" class="hidden">Singleplayer</button>
+        <button id="multiplayerBtn" class="hidden">Multiplayer</button>
+    </div>
+
+    <!-- Socket Io Client Side -->
+    <script src="/socket.io/socket.io.js"></script>
+
+
     <!-- JS FILES -->
-    <script src="./js/main.js"></script>     
-    <script src="./js/swords.js"></script>     
-    <script src="./js/fruit.js"></script>    
+    <script src="./js/fruit.js"></script>
+    <script src="./js/swords.js"></script>
+    <script src="./js/multiplayer.js"></script>
+    <script src="./js/singleplayer.js"></script>
+    <script src="./js/main.js"></script>
 </body>
+
 </html>
