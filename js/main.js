@@ -125,7 +125,6 @@ function check() {
 }
 
 function game() {
-  console.log("game");
   clear();
   background(bg);
   sword.swipe(mouseX, mouseY);
@@ -149,13 +148,17 @@ function game() {
         x++;
       }
       if (lives < 1) {
+        console.log(playerName, "Player lost the game");
         gameOver();
+        socket.emit("gameOver", playerName);
       }
       fruit.splice(i, 1);
     } else {
       if (fruit[i].sliced && fruit[i].name == "boom") {
+        console.log(playerName, "Player lost the game");
         boom.play();
         gameOver();
+        socket.emit("gameOver", playerName);
       }
       if (sword.checkSlice(fruit[i]) && fruit[i].name != "boom") {
         spliced.play();
@@ -246,21 +249,12 @@ function drawScore() {
 }
 
 function gameOver() {
+  isPlay = false;
   noLoop();
   over.play();
   clear();
   background(bg);
   image(this.gameOverImg, 155, 260, 490, 85);
   lives = 0;
-}
-
-function gameWon() {
-  noLoop();
-  over.play();
-  clear();
-  background(bg);
-  textSize(32);
-  fill(255);
-  textAlign(CENTER, CENTER);
-  text("You Won!", width / 2, height / 2);
+  socket.emit("gameOver", playerName);
 }

@@ -1,4 +1,4 @@
-// js/multiplayer.js
+let playerName;
 function setupMultiplayerListeners(socket, playerName) {
   socket.on("playerConnected", (players) => {
     console.log("Players:", players);
@@ -19,24 +19,28 @@ function setupMultiplayerListeners(socket, playerName) {
 
   socket.on("gameOver", (losingPlayerName) => {
     if (losingPlayerName !== playerName) {
-      gameWon();
+      alert("You won!");
+      window.location.reload();
+    } else {
+      alert("You lost! Better luck next");
+      window.location.reload();
     }
   });
 
   socket.on("disconnect", () => {
-    console.log("A player disconnected");
     socket.emit("playerDisconnected", playerName);
   });
 
   socket.on("playerDisconnected", (disconnectedPlayerName) => {
+    gameOver();
     if (disconnectedPlayerName !== playerName) {
-      gameWon();
+      alert("The other player has disconnected. You won!");
+      window.location.reload();
     }
   });
 }
 
 function startMultiplayer() {
-  let playerName;
   document.getElementById("gameModePopup").style.display = "none";
   playerName = prompt("Enter your name:");
   socket = io();
@@ -44,15 +48,4 @@ function startMultiplayer() {
   showSearchingState();
   setupMultiplayerListeners(socket, playerName);
   setInterval(generateRandomFruit, 500);
-}
-
-function generateRandomFruit() {
-  if (gameState.fruits.length < 5) {
-    const newFruit = randomFruit();
-    gameState.fruits.push(newFruit);
-  }
-}
-
-function clearCanvas() {
-  clear(); // Clear the canvas using p5.js clear function
 }

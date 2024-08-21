@@ -1,5 +1,3 @@
-// server.js
-
 const express = require("express");
 const app = express();
 const http = require("http").createServer(app);
@@ -34,9 +32,6 @@ io.on("connection", (socket) => {
       // Start the game loop
       setInterval(gameLoop, 1000 / 60); // 60 FPS
     }
-
-    // Emit the current game state to the newly joined player
-    socket.emit("updateFruits", gameState.fruits);
   });
 
   socket.on("updateScore", (score) => {
@@ -45,7 +40,12 @@ io.on("connection", (socket) => {
   });
 
   socket.on("hitBomb", () => {
-    io.emit("gameOver", players.get(socket.id));
+    gameState.lives[socket.id]--;
+    if (gameState.lives[socket.id] === 0) {
+      io.emit("gameOver", players.get(socket.id));
+    } else {
+      io.emit("updateLives", gameState.lives);
+    }
   });
 
   socket.on("disconnect", () => {
@@ -54,6 +54,12 @@ io.on("connection", (socket) => {
     players.delete(socket.id);
     delete gameState.scores[socket.id];
     delete gameState.lives[socket.id];
+
+    // Check if the other player is still connected
+    if (players.size === 1) {
+      const winningPlayerName = Array.from(players.values())[0];
+      io.emit("gameOver", winningPlayerName);
+    }
   });
 
   socket.on("playerDisconnected", (playerName) => {
