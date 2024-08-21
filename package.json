@@ -1,0 +1,13 @@
+{
+  "name": "fruit-ninja",
+  "version": "1.0.0",
+  "description": "Multiplayer Fruit Ninja game",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^4.3.1"
+  }
+}
