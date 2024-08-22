@@ -345,59 +345,6 @@ function multiplayerGame(p) {
   opponentSword.update();
   opponentSword.draw();
 
-  // Update and draw opponent's fruits
-  console.log("Opponent's fruits:", opponentState.fruits);
-  for (var i = opponentState.fruits.length - 1; i >= 0; i--) {
-    opponentState.fruits[i].update();
-    opponentState.fruits[i].draw();
-
-    if (!opponentState.fruits[i].visible) {
-      if (
-        !opponentState.fruits[i].sliced &&
-        opponentState.fruits[i].name != "boom"
-      ) {
-        p.image(
-          this.livesImgs2[0],
-          opponentState.fruits[i].x * p.width,
-          opponentState.fruits[i].y * p.height - 120,
-          50,
-          50
-        );
-        missed.play();
-        opponentState.lives--;
-      }
-      if (opponentState.lives < 1) {
-        console.log(opponentName, "Opponent lost the game");
-        gameOver();
-        socket.emit("gameOver", opponentName);
-      }
-      opponentState.fruits.splice(i, 1);
-    } else {
-      if (
-        opponentState.fruits[i].sliced &&
-        opponentState.fruits[i].name == "boom"
-      ) {
-        console.log(opponentName, "Opponent lost the game");
-        boom.play();
-        gameOver();
-        socket.emit("gameOver", opponentName);
-      }
-      if (
-        sword.checkSlice(opponentState.fruits[i]) &&
-        opponentState.fruits[i].name != "boom"
-      ) {
-        spliced.play();
-        showSplash(
-          opponentState.fruits[i].name,
-          opponentState.fruits[i].x * p.width,
-          opponentState.fruits[i].y * p.height
-        );
-        opponentState.fruits[i].update();
-        opponentState.fruits[i].draw();
-      }
-    }
-  }
-
   // Draw score and lives
   p.textSize(32);
   p.fill(255);
