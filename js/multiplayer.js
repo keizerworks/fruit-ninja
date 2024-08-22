@@ -10,7 +10,7 @@ function setupMultiplayerListeners(socket, playerName) {
       drawMultiplayer();
       isPlay = true;
       score = 0;
-      lives = 60;
+      lives = 3;
       loop();
     }
   });

@@ -116,7 +116,7 @@ function drawMultiplayer() {
   document.getElementById("defaultCanvas0").style.width = "50%";
   document.getElementById("defaultCanvas0").style.height = "50%";
 
-  new p5(sketch2);
+  // new p5(sketch2);
 }
 
 function showGameModePopup() {
@@ -211,6 +211,14 @@ function game() {
   score += points;
   drawScore();
   drawLives();
+  if (isMultiplayer) {
+    cnv.textSize(32);
+    cnv.textStyle(BOLD);
+    cnv.fill(0, 0, 255);
+    cnv.textAlign(CENTER);
+    cnv.text("Oponent Score: " + opponentState.score, 800 / 2, 30);
+    cnv.text("Oponent Lives: " + opponentState.lives, 800 / 2, 60);
+  }
 
   if (multiplayerGame) {
     socket.emit("updateOpponentData", {
