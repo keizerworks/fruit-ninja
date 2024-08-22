@@ -97,8 +97,8 @@ function draw() {
     image(this.foregroundImg, 0, 0, 800, 350);
     image(this.fruitLogo, 40, 20, 358, 195);
     image(this.ninjaLogo, 420, 50, 318, 165);
-    image(this.newGameImg, 310, 360, 200, 200);
-    image(this.fruitImg, 365, 415, 90, 90);
+    // image(this.newGameImg, 310, 360, 200, 200);
+    // image(this.fruitImg, 365, 415, 90, 90);
   }
 
   cnv.mouseClicked(check);
@@ -113,9 +113,8 @@ function updateOpponentState(data) {
 }
 
 function drawMultiplayer() {
-  document.getElementById("defaultCanvas0").style.width = "50%";
-  document.getElementById("defaultCanvas0").style.height = "50%";
-
+  // document.getElementById("defaultCanvas0").style.width = "50%";
+  // document.getElementById("defaultCanvas0").style.height = "50%";
   // new p5(sketch2);
 }
 
@@ -185,7 +184,7 @@ function game() {
       if (lives < 1) {
         console.log(playerName, "Player lost the game");
         gameOver();
-        socket.emit("gameOver", playerName);
+        if (isMultiplayer) socket.emit("gameOver", playerName);
       }
       fruit.splice(i, 1);
     } else {
@@ -193,7 +192,7 @@ function game() {
         console.log(playerName, "Player lost the game");
         boom.play();
         gameOver();
-        socket.emit("gameOver", playerName);
+        if (isMultiplayer) socket.emit("gameOver", playerName);
       }
       if (sword.checkSlice(fruit[i]) && fruit[i].name != "boom") {
         spliced.play();
@@ -220,7 +219,7 @@ function game() {
     cnv.text("Oponent Lives: " + opponentState.lives, 800 / 2, 60);
   }
 
-  if (multiplayerGame) {
+  if (isMultiplayer) {
     socket.emit("updateOpponentData", {
       score: score,
       lives: lives,
