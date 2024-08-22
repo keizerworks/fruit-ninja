@@ -3,7 +3,7 @@ body {
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  background: url("images/background_2.png") no-repeat center center;
+  background: url("images/fbg.png") no-repeat center center;
   background-size: 100% 100%;
   background-attachment: fixed;
   background-position: center;
@@ -115,7 +115,7 @@ body {
   width: 400px; /* Default button size */
   height: 400px;
   position: absolute;
-  right: 40px;
+  right: 400px;
   top: 90px;
   /* Default button size */
 }
@@ -124,7 +124,7 @@ body {
   width: 500px; /* Larger size for multiplayer button */
   height: 500px;
   position: absolute;
-  left: -20px; /* Larger size for multiplayer button */
+  left: -10px; /* Larger size for multiplayer button */
 }
 
 .rotating-image {

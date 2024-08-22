@@ -68,7 +68,7 @@ function preload() {
   for (var i = 0; i < 3; i++) {
     livesImgs2[i] = loadImage("images/xx" + (i + 1) + ".png");
   }
-  bg = loadImage("images/gameBg_2.png");
+  bg = loadImage("images/fbg2.png");
   foregroundImg = loadImage("images/home-mask.png");
   fruitLogo = loadImage("images/fruit.png");
   ninjaLogo = loadImage("images/ninja.png");
@@ -89,14 +89,14 @@ function setup() {
 
 function draw() {
   clear();
-  background(bg);
+  // background(bg);
 
   if (isPlay) {
+       background(bg);
     game();
   } else {
-    image(this.foregroundImg, 0, 0, 800, 350);
-    image(this.fruitLogo, 40, 20, 358, 195);
-    image(this.ninjaLogo, 420, 50, 318, 165);
+    
+
     // image(this.newGameImg, 310, 360, 200, 200);
     // image(this.fruitImg, 365, 415, 90, 90);
   }
