@@ -87,6 +87,64 @@ body {
   z-index: 1000;
 }
 
+#gameModePopup {
+  display: flex;
+  justify-content: center; /* Center buttons horizontally */
+  align-items: center; /* Center buttons vertically if needed */
+  gap: 20px; /* Adjust gap to fit the desired spacing */
+  margin-top: 30px; /* Space from the fruit logo */
+  background: none; /* Remove background and border from the container */
+  border: none;
+
+  top: 100px;
+}
+
+#gameModePopup button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 50%; /* Circular shape */
+  overflow: hidden;
+  display: flex;
+  align-items: center; /* Center the image vertically */
+  justify-content: center; /* Center the image horizontally */
+}
+
+#singleplayerBtn {
+  width: 400px; /* Default button size */
+  height: 400px;
+  position: absolute;
+  right: 40px;
+  top: 90px;
+ /* Default button size */
+}
+
+#multiplayerBtn {
+  width: 500px; /* Larger size for multiplayer button */
+  height: 500px;
+  position: absolute;
+  left: -20px; /* Larger size for multiplayer button */
+}
+
+.rotating-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover; /* Ensure the image covers the button area */
+  animation: rotate 3s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+      transform: rotate(0deg);
+  }
+  to {
+      transform: rotate(360deg);
+  }
+}
+
+
 #defaultCanvas0 {
   width: 100%;
   height: 100%;
