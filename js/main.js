@@ -212,19 +212,21 @@ function game() {
   drawScore();
   drawLives();
 
-  socket.emit("updateOpponentData", {
-    score: score,
-    lives: lives,
-    swordX: mouseX,
-    swordY: mouseY,
-    fruits: fruit.map((f) => ({
-      name: f.name,
-      x: f.x,
-      y: f.y,
-      visible: f.visible,
-      sliced: f.sliced,
-    })),
-  });
+  if (multiplayerGame) {
+    socket.emit("updateOpponentData", {
+      score: score,
+      lives: lives,
+      swordX: mouseX,
+      swordY: mouseY,
+      fruits: fruit.map((f) => ({
+        name: f.name,
+        x: f.x,
+        y: f.y,
+        visible: f.visible,
+        sliced: f.sliced,
+      })),
+    });
+  }
 }
 
 let splashTimer = 6000; // Adjust this value to change the display duration
