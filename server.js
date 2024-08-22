@@ -10,10 +10,24 @@ let gameState = {
   fruits: [],
   scores: {},
   lives: {},
+  swordX: {},
+  swordY: {},
 };
 
 function gameLoop() {
-  io.emit("updateGameState", gameState);
+  // Emit the opponent's state to the other player
+  // players.forEach((playerName, socketId) => {
+  //   const opponentId = Array.from(players.keys()).find((id) => id !== socketId);
+  //   if (opponentId) {
+  //     io.to(opponentId).emit("updateOpponentState", {
+  //       swordX: gameState.swordX[socketId],
+  //       swordY: gameState.swordY[socketId],
+  //       fruits: gameState.fruits[socketId],
+  //       score: gameState.scores[socketId],
+  //       lives: gameState.lives[socketId],
+  //     });
+  //   }
+  // });
 }
 
 io.on("connection", (socket) => {
@@ -23,6 +37,9 @@ io.on("connection", (socket) => {
     players.set(socket.id, playerName);
     gameState.scores[socket.id] = 0;
     gameState.lives[socket.id] = 3;
+    gameState.swordX[socket.id] = 0;
+    gameState.swordY[socket.id] = 0;
+    gameState.fruits[socket.id] = [];
     io.emit("playerConnected", Array.from(players.values()));
 
     if (players.size === 2) {
@@ -34,17 +51,12 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("updateScore", (score) => {
-    gameState.scores[socket.id] = score;
-    io.emit("updateScores", gameState.scores);
-  });
-
-  socket.on("hitBomb", () => {
-    gameState.lives[socket.id]--;
-    if (gameState.lives[socket.id] === 0) {
-      io.emit("gameOver", players.get(socket.id));
-    } else {
-      io.emit("updateLives", gameState.lives);
+  socket.on("updateOpponentData", (data) => {
+    const opponentId = Array.from(players.keys()).find(
+      (id) => id !== socket.id
+    );
+    if (opponentId) {
+      io.to(opponentId).emit("updateOpponentState", data);
     }
   });
 
@@ -54,6 +66,9 @@ io.on("connection", (socket) => {
     players.delete(socket.id);
     delete gameState.scores[socket.id];
     delete gameState.lives[socket.id];
+    delete gameState.swordX[socket.id];
+    delete gameState.swordY[socket.id];
+    delete gameState.fruits[socket.id];
 
     // Check if the other player is still connected
     if (players.size === 1) {

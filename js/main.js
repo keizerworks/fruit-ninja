@@ -1,4 +1,7 @@
 var cnv;
+var isMultiplayer = false;
+var opponentCanvas;
+var opponentSword;
 var score,
   points = 0;
 var lives,
@@ -15,13 +18,29 @@ var fruitsList = [
   "watermelon",
   "boom",
 ];
+
+var opponentFruitList = [
+  "apple",
+  "banana",
+  "peach",
+  "strawberry",
+  "watermelon",
+  "boom",
+];
+
 var fruitsImgs = [],
   slicedFruitsImgs = [],
   splashImgs = [];
 var livesImgs = [],
   livesImgs2 = [];
 var boom, spliced, missed, over, start;
-
+let opponentState = {
+  swordX: 0,
+  swordY: 0,
+  fruits: [],
+  score: 0,
+  lives: 6,
+};
 let socket;
 
 function preload() {
@@ -64,7 +83,7 @@ function setup() {
   sword = new Sword(color("#FFFFFF"));
   frameRate(60);
   score = 0;
-  lives = 6;
+  lives = 60;
   showGameModePopup(); // Show the popup when the game starts
 }
 
@@ -83,6 +102,21 @@ function draw() {
   }
 
   cnv.mouseClicked(check);
+}
+
+function updateOpponentState(data) {
+  opponentState.swordX = data.swordX;
+  opponentState.swordY = data.swordY;
+  opponentState.fruits = data.fruits;
+  opponentState.score = data.score;
+  opponentState.lives = data.lives;
+}
+
+function drawMultiplayer() {
+  document.getElementById("defaultCanvas0").style.width = "50%";
+  document.getElementById("defaultCanvas0").style.height = "50%";
+
+  // new p5(sketch2);
 }
 
 function showGameModePopup() {
@@ -137,6 +171,7 @@ function game() {
     }
   }
   points = 0;
+
   for (var i = fruit.length - 1; i >= 0; i--) {
     fruit[i].update();
     fruit[i].draw();
@@ -176,6 +211,30 @@ function game() {
   score += points;
   drawScore();
   drawLives();
+  if (isMultiplayer) {
+    cnv.textSize(32);
+    cnv.textStyle(BOLD);
+    cnv.fill(0, 0, 255);
+    cnv.textAlign(CENTER);
+    cnv.text("Oponent Score: " + opponentState.score, 800 / 2, 30);
+    cnv.text("Oponent Lives: " + opponentState.lives, 800 / 2, 60);
+  }
+
+  if (multiplayerGame) {
+    socket.emit("updateOpponentData", {
+      score: score,
+      lives: lives,
+      swordX: mouseX,
+      swordY: mouseY,
+      fruits: fruit.map((f) => ({
+        name: f.name,
+        x: f.x,
+        y: f.y,
+        visible: f.visible,
+        sliced: f.sliced,
+      })),
+    });
+  }
 }
 
 let splashTimer = 6000; // Adjust this value to change the display duration
@@ -257,4 +316,46 @@ function gameOver() {
   image(this.gameOverImg, 155, 260, 490, 85);
   lives = 0;
   socket.emit("gameOver", playerName);
+}
+
+function sketch2(p) {
+  let prevX = null;
+  let prevY = null;
+
+  p.setup = function () {
+    opponentCanvas = p.createCanvas(400, 300);
+    opponentCanvas.id("opponentCanvas");
+    opponentSword = new Sword(color("#FFFFFF"));
+  };
+
+  p.draw = function () {
+    p.clear();
+    p.background(bg);
+
+    if (isPlay && isMultiplayer) {
+      multiplayerGame(p);
+    } else {
+      p.image(this.foregroundImg, 0, 0, 800, 350);
+      p.image(this.fruitLogo, 40, 20, 358, 195);
+      p.image(this.ninjaLogo, 420, 50, 318, 165);
+      p.image(this.newGameImg, 310, 360, 200, 200);
+      p.image(this.fruitImg, 365, 415, 90, 90);
+    }
+  };
+}
+
+function multiplayerGame(p) {
+  console.log("Multiplayer game");
+  p.clear();
+  p.background(bg);
+
+  opponentSword.swipe(opponentState.swordX, opponentState.swordY);
+  opponentSword.update();
+  opponentSword.draw();
+
+  // Draw score and lives
+  p.textSize(32);
+  p.fill(255);
+  p.text("Score: " + opponentState.score, 10, 30);
+  p.text("Lives: " + opponentState.lives, 10, 60);
 }
