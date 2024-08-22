@@ -6,11 +6,17 @@ function setupMultiplayerListeners(socket, playerName) {
       let loadingMsg = select("#loadingMsg");
       if (loadingMsg) loadingMsg.remove();
       cnv.style("display", "block");
+      isMultiplayer = true;
+      drawMultiplayer();
       isPlay = true;
       score = 0;
-      lives = 3;
+      lives = 60;
       loop();
     }
+  });
+
+  socket.on("updateOpponentState", (data) => {
+    updateOpponentState(data);
   });
 
   socket.on("updateScores", (scores) => {
@@ -43,9 +49,11 @@ function setupMultiplayerListeners(socket, playerName) {
 function startMultiplayer() {
   document.getElementById("gameModePopup").style.display = "none";
   playerName = prompt("Enter your name:");
+
   socket = io();
   socket.emit("join", playerName);
   showSearchingState();
   setupMultiplayerListeners(socket, playerName);
   setInterval(generateRandomFruit, 500);
+  loop();
 }
