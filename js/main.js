@@ -127,10 +127,6 @@ function showGameModePopup() {
   document
     .getElementById("multiplayerBtn")
     .addEventListener("click", startMultiplayer);
-
-  document
-    .getElementById("playWithBotBtn")
-    .addEventListener("click", startBotGame);
 }
 
 function showSearchingState() {
