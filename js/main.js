@@ -6,6 +6,7 @@ var opponentCanvas;
 var opponentSword;
 var score,
   points = 0;
+var isMobile = window.innerWidth <= 768;
 var lives,
   x = 0;
 var isPlay = false;
@@ -81,7 +82,7 @@ function preload() {
 }
 
 function setup() {
-  cnv = createCanvas(800, 635);
+  cnv = createCanvas(windowWidth, windowHeight);
   sword = new Sword(color("#FFFFFF"));
   frameRate(60);
   score = 0;
@@ -462,7 +463,15 @@ function gameOver(winner) {
   over.play();
   clear();
   background(bg);
-  image(this.gameOverImg, 155, 260, 490, 85);
+
+  // Detect screen size
+
+  // Set dimensions based on screen size
+  const imgWidth = isMobile ? 150 : 490;
+  const imgHeight = isMobile ? 20 : 85;
+
+  // Display the image with the appropriate dimensions
+  image(this.gameOverImg, 155, 260, imgWidth, imgHeight);
 
   if (isPlayWithBot) {
     if (winner === "bot") {
@@ -485,7 +494,7 @@ function sketch2(p) {
   let prevY = null;
 
   p.setup = function () {
-    opponentCanvas = p.createCanvas(400, 300);
+    opponentCanvas = p.createCanvas(windowWidth, windowHeight);
     opponentCanvas.id("opponentCanvas");
     opponentSword = new Sword(color("#FFFFFF"));
   };
