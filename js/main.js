@@ -133,11 +133,7 @@ multiplayerBtn.style("background-size", "contain");
   multiplayerBtn.style("bottom", "20px");
   multiplayerBtn.style("width", "clamp(100px, 20vw, 400px)");
   multiplayerBtn.style("height", "clamp(100px, 20vw, 400px)");
-  if (windowWidth >= 1200) {
-    multiplayerBtn.style("width", "500px");
-    multiplayerBtn.style("height", "500px");
-    multiplayerBtn.style("bottom", "-80px");
-  }
+
   multiplayerBtn.mousePressed(startMultiplayer);
 }
 
