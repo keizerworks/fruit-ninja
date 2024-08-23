@@ -85,7 +85,7 @@ function setup() {
   sword = new Sword(color("#FFFFFF"));
   frameRate(60);
   score = 0;
-  lives = 60;
+  lives = 3;
   showGameModePopup(); // Show the popup when the game starts
 }
 
@@ -260,36 +260,36 @@ function game() {
           document.getElementById("defaultCanvas0").style.border = "none";
         }
       });
-    }
 
-    if (!isSpectating) {
-      botscore = 0;
-      botlives = 3;
-      botpoints = 0;
+      if (!isSpectating) {
+        botscore = 0;
+        botlives = 3;
+        botpoints = 0;
 
-      // Randomly decrease lives, increase points, and scores
-      if (Math.random() < 0.6) {
-        // 60% chance to decrease a life
-        botlives--;
-        console.log("Bot lost a life. Lives left:", botlives);
-      }
+        // Randomly decrease lives, increase points, and scores
+        if (Math.random() < 0.6) {
+          // 60% chance to decrease a life
+          botlives--;
+          console.log("Bot lost a life. Lives left:", botlives);
+        }
 
-      if (Math.random() < 0.05) {
-        // 5% chance to increase points
-        botpoints += Math.floor(Math.random() * 10) + 1; // Increase by 1 to 10 points
-        console.log("Bot gained points. Points:", botpoints);
-      }
+        if (Math.random() < 0.05) {
+          // 5% chance to increase points
+          botpoints += Math.floor(Math.random() * 10) + 1; // Increase by 1 to 10 points
+          console.log("Bot gained points. Points:", botpoints);
+        }
 
-      if (Math.random() < 0.05) {
-        // 5% chance to increase score
-        botscore += Math.floor(Math.random() * 10) + 1; // Increase by 1 to 10 score
-        console.log("Bot gained score. Score:", botscore);
-      }
+        if (Math.random() < 0.05) {
+          // 5% chance to increase score
+          botscore += Math.floor(Math.random() * 8) + 1; // Increase by 1 to 10 score
+          console.log("Bot gained score. Score:", botscore);
+        }
 
-      // Check if lives are zero and trigger gameOver
-      if (botlives <= 0) {
-        console.log("Bot lost all lives. Game over.");
-        gameOver();
+        // Check if lives are zero and trigger gameOver
+        if (botlives <= 0) {
+          console.log("Bot lost all lives. Game over.");
+          gameOver();
+        }
       }
     }
   }
@@ -303,7 +303,7 @@ function game() {
 let botX, botY;
 let lastUpdateTime = 0;
 const updateInterval = 250; // Update bot position every 100ms
-const movementSpeed = 0.35;
+const movementSpeed = 0.4;
 
 function drawBotPOV() {
   clear();
@@ -388,7 +388,7 @@ function drawBotPOV() {
   }
   sword.draw();
   botscore += botpoints;
-  drawScore(botscore);
+  drawScore(botpoints);
   drawLives(botlives);
 }
 
