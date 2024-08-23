@@ -97,8 +97,14 @@ function setup() {
   // singleplayerBtn.position(350, 190);
   // singleplayerBtn.size(400, 400);
   // singleplayerBtn.html("Singleplayer");
-  singleplayerBtn.style("background", "url(images/Start_icon.png)");
-  singleplayerBtn.style("background-size", "cover");
+  singleplayerBtn.style("background", "url(images/Start_icon.png) no-repeat center");
+
+  singleplayerBtn.style("background-size", "contain");
+singleplayerBtn.style("width", "400px");  // Set a specific width
+singleplayerBtn.style("height", "400px"); // Set a specific height
+singleplayerBtn.style("border", "none");
+singleplayerBtn.style("padding", "0");
+singleplayerBtn.style("cursor", "pointer");
   singleplayerBtn.mousePressed(startSingleplayer);
 
   // Create multiplayer button
@@ -106,8 +112,13 @@ function setup() {
   multiplayerBtn.id("multiplayerBtn");
   // multiplayerBtn.position(300, 150);
   // multiplayerBtn.size(500, 500);
-  multiplayerBtn.style("background", "url(imagesMultiplayer_Icon.png)");
-  multiplayerBtn.style("background-size", "cover");
+multiplayerBtn.style("background", "url(images/Multiplayer_Icon.png) no-repeat center");
+multiplayerBtn.style("background-size", "contain");
+multiplayerBtn.style("width", "200px");  // Set a specific width
+multiplayerBtn.style("height", "200px"); // Set a specific height
+multiplayerBtn.style("border", "none");
+multiplayerBtn.style("padding", "0");
+multiplayerBtn.style("cursor", "pointer");
   multiplayerBtn.mousePressed(startMultiplayer);
 }
 
