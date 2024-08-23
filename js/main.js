@@ -94,18 +94,25 @@ function setup() {
   // Create singleplayer button
   let singleplayerBtn = createButton("");
   singleplayerBtn.id("singleplayerBtn");
-  // singleplayerBtn.position(350, 190);
-  // singleplayerBtn.size(400, 400);
-  // singleplayerBtn.html("Singleplayer");
   singleplayerBtn.style("background", "url(images/Start_icon.png) no-repeat center");
-
   singleplayerBtn.style("background-size", "contain");
-singleplayerBtn.style("width", "400px");  // Set a specific width
-singleplayerBtn.style("height", "400px"); // Set a specific height
-singleplayerBtn.style("border", "none");
-singleplayerBtn.style("padding", "0");
-singleplayerBtn.style("cursor", "pointer");
+  singleplayerBtn.style("border", "none");
+  singleplayerBtn.style("padding", "0");
+  singleplayerBtn.style("cursor", "pointer");
   singleplayerBtn.mousePressed(startSingleplayer);
+  
+  // Responsive positioning and sizing
+  singleplayerBtn.style("position", "fixed");
+  singleplayerBtn.style("right", "10px");
+  singleplayerBtn.style("bottom", "20px");
+  
+  // Base size for most screens
+  singleplayerBtn.style("width", "clamp(100px, 20vw, 400px)");
+  singleplayerBtn.style("height", "clamp(100px, 20vw, 400px)");
+  
+  // Adjust size for larger screens
+
+  
 
   // Create multiplayer button
   let multiplayerBtn = createButton("");
@@ -114,11 +121,23 @@ singleplayerBtn.style("cursor", "pointer");
   // multiplayerBtn.size(500, 500);
 multiplayerBtn.style("background", "url(images/Multiplayer_Icon.png) no-repeat center");
 multiplayerBtn.style("background-size", "contain");
-multiplayerBtn.style("width", "200px");  // Set a specific width
-multiplayerBtn.style("height", "200px"); // Set a specific height
-multiplayerBtn.style("border", "none");
-multiplayerBtn.style("padding", "0");
-multiplayerBtn.style("cursor", "pointer");
+multiplayerBtn.style("background-size", "contain");
+  multiplayerBtn.style("border", "none");
+  multiplayerBtn.style("padding", "0");
+  multiplayerBtn.style("cursor", "pointer");
+
+  
+  // Responsive positioning and sizing
+  multiplayerBtn.style("position", "fixed");
+  multiplayerBtn.style("left", "10px");
+  multiplayerBtn.style("bottom", "20px");
+  multiplayerBtn.style("width", "clamp(100px, 20vw, 400px)");
+  multiplayerBtn.style("height", "clamp(100px, 20vw, 400px)");
+  if (windowWidth >= 1200) {
+    multiplayerBtn.style("width", "500px");
+    multiplayerBtn.style("height", "500px");
+    multiplayerBtn.style("bottom", "-80px");
+  }
   multiplayerBtn.mousePressed(startMultiplayer);
 }
 
@@ -277,7 +296,7 @@ function game() {
       spectateBtn.id = "spectateBtn";
       spectateBtn.innerText = "Spectate";
       spectateBtn.style.position = "absolute";
-      spectateBtn.style.top = "10px";
+      spectateBtn.style.top = "30px";
       spectateBtn.style.right = "10px";
       document.body.appendChild(spectateBtn);
 
@@ -286,7 +305,7 @@ function game() {
         if (isSpectating) {
           spectateBtn.innerText = "Return";
           document.getElementById("defaultCanvas0").style.border =
-            "5px solid red";
+            "none";
         } else {
           spectateBtn.innerText = "Spectate";
           document.getElementById("defaultCanvas0").style.border = "none";
