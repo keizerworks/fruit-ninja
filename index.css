@@ -1,12 +1,20 @@
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  background: url("images/fbg.png") no-repeat center center;
-  background-size: 100% 100%;
-  background-attachment: fixed;
+  background-image: url("images/fbg.png");
   background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
   overflow: hidden;
 }
 ::-webkit-scrollbar {
@@ -211,3 +219,8 @@ body {
     transform: rotate(360deg);
   }
 }
+
+
+
+
+

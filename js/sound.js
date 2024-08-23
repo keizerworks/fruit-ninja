@@ -15,7 +15,7 @@ function toggleSound() {
     over.setVolume(0);
 
     // Change the button icon to mute
-    soundIcon.src = "images/mute.pngw";
+    soundIcon.src = "images/mute.png";
     soundIcon.alt = "Sound Off";
   } else {
     // Unmute all sounds
