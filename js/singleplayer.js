@@ -1,6 +1,6 @@
 // js/singleplayer.js
 function startSingleplayer() {
-  document.getElementById("gameModePopup").style.display = "none";
+  document.getElementById("singleplayerBtn").style.display = "none";
   isPlay = true;
   start.play();
   loop();

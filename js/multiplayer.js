@@ -47,7 +47,8 @@ function setupMultiplayerListeners(socket, playerName) {
 }
 
 function startMultiplayer() {
-  document.getElementById("gameModePopup").style.display = "none";
+  document.getElementById("multiplayerBtn").style.display = "none";
+  document.getElementById("singleplayerBtn").style.display = "none";
   playerName = prompt("Enter your name:");
 
   socket = io();

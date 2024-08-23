@@ -83,11 +83,32 @@ function preload() {
 
 function setup() {
   cnv = createCanvas(windowWidth, windowHeight);
+  cnv.position(0, 0);
+  cnv.style("z-index", "-1");
   sword = new Sword(color("#FFFFFF"));
   frameRate(60);
   score = 0;
   lives = 3;
   showGameModePopup(); // Show the popup when the game starts
+
+  // Create singleplayer button
+  let singleplayerBtn = createButton("");
+  singleplayerBtn.id("singleplayerBtn");
+  // singleplayerBtn.position(350, 190);
+  // singleplayerBtn.size(400, 400);
+  // singleplayerBtn.html("Singleplayer");
+  singleplayerBtn.style("background", "url(images/Start_icon.png)");
+  singleplayerBtn.style("background-size", "cover");
+  singleplayerBtn.mousePressed(startSingleplayer);
+
+  // Create multiplayer button
+  let multiplayerBtn = createButton("");
+  multiplayerBtn.id("multiplayerBtn");
+  // multiplayerBtn.position(300, 150);
+  // multiplayerBtn.size(500, 500);
+  multiplayerBtn.style("background", "url(imagesMultiplayer_Icon.png)");
+  multiplayerBtn.style("background-size", "cover");
+  multiplayerBtn.mousePressed(startMultiplayer);
 }
 
 function draw() {
@@ -120,14 +141,14 @@ function drawMultiplayer() {
 }
 
 function showGameModePopup() {
-  document.getElementById("gameModePopup").style.display = "block";
-
-  document
-    .getElementById("singleplayerBtn")
-    .addEventListener("click", startSingleplayer);
-  document
-    .getElementById("multiplayerBtn")
-    .addEventListener("click", startMultiplayer);
+  // document.getElementById("gameModePopup").style.display = "block";
+  console.log("showGameModePopup");
+  //  document
+  //     .getElementById("singleplayerBtn")
+  //     .addEventListener("click", startSingleplayer);
+  //   document
+  //     .getElementById("multiplayerBtn")
+  //     .addEventListener("click", startMultiplayer);
 }
 
 function showSearchingState() {
@@ -487,6 +508,8 @@ function gameOver(winner) {
 
   lives = 0;
   if (isMultiplayer) socket.emit("gameOver", playerName);
+
+  setTimeout(() => location.reload(), 2000);
 }
 
 function sketch2(p) {
@@ -497,6 +520,8 @@ function sketch2(p) {
     opponentCanvas = p.createCanvas(windowWidth, windowHeight);
     opponentCanvas.id("opponentCanvas");
     opponentSword = new Sword(color("#FFFFFF"));
+    opponentCanvas.position(0, 0);
+    opponentCanvas.style("z-index", "-1");
   };
 
   p.draw = function () {

@@ -1,8 +1,9 @@
-
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 body {
@@ -34,7 +35,6 @@ body {
   align-items: flex-start;
   padding-left: 50px;
   gap: 50px;
-  
 }
 #singlePlayer {
   display: block;
@@ -105,7 +105,7 @@ body {
   margin-top: 30px; /* Space from the fruit logo */
   background: none; /* Remove background and border from the container */
   border: none;
-  
+
   top: 100px;
 }
 
@@ -178,6 +178,7 @@ body {
 #gameModePopup button {
   border: none;
   background-color: transparent;
+  z-index: 100;
   cursor: pointer;
   padding: 0;
   border-radius: 50%; /* Circular shape */
@@ -188,15 +189,37 @@ body {
 }
 
 #singleplayerBtn {
+  border: none;
+  background-color: transparent;
+  z-index: 100;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 50%; /* Circular shape */
+  overflow: hidden;
+  display: flex;
+  align-items: center; /* Center the image vertically */
+  justify-content: center; /* Center the image horizontally */
+
   width: 400px; /* Default button size */
   height: 400px;
-
+  z-index: 100;
   right: 350px;
   top: 190px;
+  background-repeat: no-repeat;
   /* Defaul button size */
 }
 
 #multiplayerBtn {
+  border: none;
+  background-color: transparent;
+  z-index: 100;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 50%; /* Circular shape */
+  overflow: hidden;
+  display: flex;
+  align-items: center; /* Center the image vertically */
+  justify-content: center; /* Center the image horizontally */
   width: 500px; /* Larger size for multiplayer button */
   height: 500px;
   top: 150px;
@@ -219,8 +242,3 @@ body {
     transform: rotate(360deg);
   }
 }
-
-
-
-
-
