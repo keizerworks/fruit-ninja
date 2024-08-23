@@ -170,8 +170,10 @@ function showSearchingState() {
   let loadingMsg = createP("Searching for a player...");
   loadingMsg.id("loadingMsg");
   loadingMsg.style("text-align", "center");
-  loadingMsg.style("font-size", "24px");
+  loadingMsg.style("font-size", "clamp(24px, 5vw, 36px)");
   loadingMsg.style("margin-top", "50px");
+  loadingMsg.style("color", "white");
+  loadingMsg.style("font-weight", "bold");
 
   // Create a timer
   let timer = 5;
@@ -507,13 +509,23 @@ function gameOver(winner) {
 
   if (isPlayWithBot) {
     if (winner === "bot") {
-      alert("Bot Won the game");
+      Swal.fire({
+        title: 'Game Over!',
+        text: 'Bot Won the game',
+        icon: 'info',
+        confirmButtonText: 'OK'
+      });
     }
-
+  
     if (winner === "player") {
-      alert("You Won the game");
+      Swal.fire({
+        title: 'Congratulations!',
+        text: 'You Won the game',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });
     }
-
+  
     isPlayWithBot = false;
   }
 

@@ -26,7 +26,7 @@ function toggleSound() {
     over.setVolume(1);
 
     // Change the button icon to sound
-    soundIcon.src = "images/mute.png";
+    soundIcon.src = "images/sound.png";
     soundIcon.alt = "Sound On";
   }
 }

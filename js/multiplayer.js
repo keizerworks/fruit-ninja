@@ -25,11 +25,27 @@ function setupMultiplayerListeners(socket, playerName) {
 
   socket.on("gameOver", (losingPlayerName) => {
     if (losingPlayerName !== playerName) {
-      alert("You won!");
-      window.location.reload();
+      Swal.fire({
+        title: 'Congratulations!',
+        text: 'You won!',
+        icon: 'success',
+        confirmButtonText: 'Play Again'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
     } else {
-      alert("You lost! Better luck next");
-      window.location.reload();
+      Swal.fire({
+        title: 'Game Over',
+        text: 'You lost! Better luck next time',
+        icon: 'error',
+        confirmButtonText: 'Try Again'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
     }
   });
 
@@ -40,8 +56,16 @@ function setupMultiplayerListeners(socket, playerName) {
   socket.on("playerDisconnected", (disconnectedPlayerName) => {
     gameOver();
     if (disconnectedPlayerName !== playerName) {
-      alert("The other player has disconnected. You won!");
-      window.location.reload();
+      Swal.fire({
+        title: "You Won!",
+        text: "The other player has disconnected.",
+        icon: "success",
+        confirmButtonText: "OK"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
     }
   });
 }
@@ -49,11 +73,29 @@ function setupMultiplayerListeners(socket, playerName) {
 function startMultiplayer() {
   document.getElementById("multiplayerBtn").style.display = "none";
   document.getElementById("singleplayerBtn").style.display = "none";
-  playerName = prompt("Enter your name:");
 
-  socket = io();
-  socket.emit("join", playerName);
-  showSearchingState();
-  setupMultiplayerListeners(socket, playerName);
-  loop();
+  Swal.fire({
+    title: 'Enter your name',
+    input: 'text',
+    inputPlaceholder: 'Your name',
+    showCancelButton: true,
+    inputValidator: (value) => {
+      if (!value) {
+        return 'You need to enter a name!'
+      }
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      playerName = result.value;
+      socket = io();
+      socket.emit("join", playerName);
+      showSearchingState();
+      setupMultiplayerListeners(socket, playerName);
+      loop();
+    } else {
+      // If the user cancels, show the buttons again
+      document.getElementById("multiplayerBtn").style.display = "block";
+      document.getElementById("singleplayerBtn").style.display = "block";
+    }
+  });
 }

@@ -24,34 +24,23 @@ function showPlayWithBothSuggestion() {
   let loadingMsg = select("#loadingMsg");
   if (loadingMsg) loadingMsg.remove();
 
-  let suggestionMsg = createP(
-    "No player found. Would you like to start a game with Bot?"
-  );
-  suggestionMsg.style("text-align", "center");
-  suggestionMsg.style("font-size", "24px");
-  suggestionMsg.style("margin-top", "50px");
-
-  let yesBtn = createButton("Yes");
-  yesBtn.mousePressed(() => {
-    suggestionMsg.remove();
-    yesBtn.remove();
-    noBtn.remove();
-    startBotGame(true);
+  Swal.fire({
+    title: 'No player found',
+    text: 'Would you like to start a game with Bot?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, start with Bot',
+    cancelButtonText: 'No, cancel'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      startBotGame(true);
+    } else {
+      // Handle cancellation (e.g., return to main menu)
+      // You might want to add some code here to reset the game state or show the main menu
+    }
   });
-
-  let noBtn = createButton("No");
-  noBtn.mousePressed(() => {
-    suggestionMsg.remove();
-    yesBtn.remove();
-    noBtn.remove();
-    showMainMenu();
-  });
-
-  let buttonDiv = createDiv();
-  buttonDiv.style("text-align", "center");
-  buttonDiv.style("margin-top", "20px");
-  yesBtn.parent(buttonDiv);
-  noBtn.parent(buttonDiv);
 }
 
 const showMainMenu = () => {
