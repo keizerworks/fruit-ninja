@@ -26,6 +26,7 @@ body {
   align-items: flex-start;
   padding-left: 50px;
   gap: 50px;
+  
 }
 #singlePlayer {
   display: block;
@@ -78,6 +79,7 @@ body {
 .popup {
   display: none;
   position: fixed;
+
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -95,7 +97,7 @@ body {
   margin-top: 30px; /* Space from the fruit logo */
   background: none; /* Remove background and border from the container */
   border: none;
-
+  
   top: 100px;
 }
 
@@ -180,17 +182,17 @@ body {
 #singleplayerBtn {
   width: 400px; /* Default button size */
   height: 400px;
-  position: absolute;
-  right: 40px;
-  top: 90px;
-  /* Default button size */
+
+  right: 350px;
+  top: 190px;
+  /* Defaul button size */
 }
 
 #multiplayerBtn {
   width: 500px; /* Larger size for multiplayer button */
   height: 500px;
-  position: absolute;
-  left: -20px; /* Larger size for multiplayer button */
+  top: 150px;
+  left: 300px; /* Larger size for multiplayer button */
 }
 
 .rotating-image {
