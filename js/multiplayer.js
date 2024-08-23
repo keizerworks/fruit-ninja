@@ -54,6 +54,5 @@ function startMultiplayer() {
   socket.emit("join", playerName);
   showSearchingState();
   setupMultiplayerListeners(socket, playerName);
-  setInterval(generateRandomFruit, 500);
   loop();
 }
