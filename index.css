@@ -120,15 +120,6 @@ body {
   /* Default button size */
 }
 
-#playWithBotBtn {
-  width: 100px; /* Default button size */
-  height: 100px;
-  position: absolute;
-  right: 200px;
-  top: 90px;
-  /* Default button size */
-}
-
 #multiplayerBtn {
   width: 500px; /* Larger size for multiplayer button */
   height: 500px;

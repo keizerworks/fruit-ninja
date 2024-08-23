@@ -145,12 +145,12 @@ function showSearchingState() {
   loadingMsg.style("margin-top", "50px");
 
   // Create a timer
-  let timer = 60;
+  let timer = 5;
   let timerInterval = setInterval(() => {
     timer--;
     if (timer <= 0) {
       clearInterval(timerInterval);
-      showSinglePlayerSuggestion();
+      showPlayWithBothSuggestion();
     }
   }, 1000);
 }
@@ -187,16 +187,17 @@ function game() {
       }
       if (lives < 1) {
         console.log(playerName, "Player lost the game");
-        gameOver();
         if (isMultiplayer) socket.emit("gameOver", playerName);
+        if (isPlayWithBot) gameOver("bot");
+        gameOver();
       }
       fruit.splice(i, 1);
     } else {
       if (fruit[i].sliced && fruit[i].name == "boom") {
-        console.log(playerName, "Player lost the game");
         boom.play();
-        gameOver();
         if (isMultiplayer) socket.emit("gameOver", playerName);
+        if (isPlayWithBot) gameOver("bot");
+        gameOver();
       }
       if (sword.checkSlice(fruit[i]) && fruit[i].name != "boom") {
         spliced.play();
@@ -288,7 +289,7 @@ function game() {
         // Check if lives are zero and trigger gameOver
         if (botlives <= 0) {
           console.log("Bot lost all lives. Game over.");
-          gameOver();
+          gameOver("player");
         }
       }
     }
@@ -303,7 +304,7 @@ function game() {
 let botX, botY;
 let lastUpdateTime = 0;
 const updateInterval = 250; // Update bot position every 100ms
-const movementSpeed = 0.4;
+const movementSpeed = 0.3;
 
 function drawBotPOV() {
   clear();
@@ -316,36 +317,31 @@ function drawBotPOV() {
     cnv.mouseMoved(() => false);
   }
 
-  if (isSpectating) {
-    let gameCanvas = document.getElementById("defaultCanvas0");
-    gameCanvas.style.pointerEvents = "none";
-  } else {
-    let gameCanvas = document.getElementById("defaultCanvas0");
-    gameCanvas.style.pointerEvents = "auto";
-  }
+  let gameCanvas = document.getElementById("defaultCanvas0");
+  gameCanvas.style.pointerEvents = isSpectating ? "none" : "auto";
 
   // Update bot's target position at regular intervals
   if (millis() - lastUpdateTime > updateInterval) {
-    targetX = random(width);
-    targetY = random(height);
+    if (fruit.length > 0) {
+      let targetFruit = fruit[Math.floor(Math.random() * fruit.length)];
+      targetX = targetFruit.x;
+      targetY = targetFruit.y;
+    } else {
+      targetX = random(width);
+      targetY = random(height);
+    }
     lastUpdateTime = millis();
   }
 
   // Gradually move towards the target position
   if (!botX) botX = width / 2;
-  if (!botY) botY = height / 2;
+  if (!botY) botY = height / 3;
   botX = lerp(botX, targetX, movementSpeed);
   botY = lerp(botY, targetY, movementSpeed);
 
   sword.swipe(botX, botY);
   sword.update();
   sword.draw();
-
-  if (frameCount % 5 === 0) {
-    if (noise(frameCount) > 0.69) {
-      fruit.push(randomFruit());
-    }
-  }
 
   if (frameCount % 5 === 0) {
     if (noise(frameCount) > 0.69) {
@@ -363,16 +359,17 @@ function drawBotPOV() {
         botlives--;
         x++;
       }
-      if (lives < 1) {
+      if (botlives < 1) {
+        if (isPlayWithBot) gameOver("player");
         gameOver();
-        if (isMultiplayer) socket.emit("gameOver", playerName);
       }
       fruit.splice(i, 1);
     } else {
       if (fruit[i].sliced && fruit[i].name == "boom") {
         boom.play();
-        gameOver();
+        if (isPlayWithBot) gameOver("player");
         if (isMultiplayer) socket.emit("gameOver", playerName);
+        gameOver();
       }
       if (sword.checkSlice(fruit[i]) && fruit[i].name != "boom") {
         spliced.play();
@@ -383,6 +380,7 @@ function drawBotPOV() {
       }
     }
   }
+
   if (frameCount % 2 === 0) {
     sword.update();
   }
@@ -462,13 +460,26 @@ function drawScore(score) {
   text(score, 50, 50);
 }
 
-function gameOver() {
+function gameOver(winner) {
   isPlay = false;
   noLoop();
   over.play();
   clear();
   background(bg);
   image(this.gameOverImg, 155, 260, 490, 85);
+
+  if (isPlayWithBot) {
+    if (winner === "bot") {
+      alert("Bot Won the game");
+    }
+
+    if (winner === "player") {
+      alert("You Won the game");
+    }
+
+    isPlayWithBot = false;
+  }
+
   lives = 0;
   if (isMultiplayer) socket.emit("gameOver", playerName);
 }
