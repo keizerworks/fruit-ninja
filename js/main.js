@@ -537,8 +537,6 @@ function gameOver(winner) {
   clear();
   background(bg);
 
-  // Detect screen size
-
   // Set dimensions based on screen size
   const canvasWidth = width;
   const canvasHeight = height;
@@ -554,26 +552,30 @@ function gameOver(winner) {
   // Display the image at the calculated position and size
   image(this.gameOverImg, imgX, imgY, imgWidth, imgHeight);
 
-
   if (isPlayWithBot) {
+    let title, text, icon;
+    
     if (winner === "bot") {
-      Swal.fire({
-        title: 'Game Over!',
-        text: 'Bot Won the game',
-        icon: 'info',
-        confirmButtonText: 'OK'
-      });
+      title = 'Game Over!';
+      text = 'Bot Won the game';
+      icon = 'info';
+    } else if (winner === "player") {
+      title = 'Congratulations!';
+      text = 'You Won the game';
+      icon = 'success';
     }
-  
-    if (winner === "player") {
-      Swal.fire({
-        title: 'Congratulations!',
-        text: 'You Won the game',
-        icon: 'success',
-        confirmButtonText: 'OK'
-      });
-    }
-  
+
+    Swal.fire({
+      title: title,
+      html: `
+        ${text}<br><br>
+        Your score: ${score}<br>
+        Bot's score: ${botscore}
+      `,
+      icon: icon,
+      confirmButtonText: 'OK'
+    });
+
     isPlayWithBot = false;
   }
 

@@ -1,5 +1,6 @@
 let playerName;
 let gameEnded = false;
+let opponentScore = 0;
 
 function setupMultiplayerListeners(socket, playerName) {
   socket.on("playerConnected", (players) => {
@@ -12,6 +13,7 @@ function setupMultiplayerListeners(socket, playerName) {
       drawMultiplayer();
       isPlay = true;
       score = 0;
+      opponentScore = 0;
       lives = 3;
       gameEnded = false;
       loop();
@@ -24,6 +26,15 @@ function setupMultiplayerListeners(socket, playerName) {
 
   socket.on("updateScores", (scores) => {
     console.log("Scores:", scores);
+    if (scores[playerName] !== undefined) {
+      score = scores[playerName];
+    }
+    for (let player in scores) {
+      if (player !== playerName) {
+        opponentScore = scores[player];
+        break;
+      }
+    }
   });
 
   socket.on("gameOver", (losingPlayerName) => {
@@ -55,7 +66,11 @@ function setupMultiplayerListeners(socket, playerName) {
 function showGameOverAlert(title, text, icon) {
   Swal.fire({
     title: title,
-    text: text,
+    html: `
+      ${text}<br><br>
+      Your score: ${score}<br>
+      Opponent's score: ${opponentScore}
+    `,
     icon: icon,
     confirmButtonText: 'Play Again'
   }).then((result) => {
