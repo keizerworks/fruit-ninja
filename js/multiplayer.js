@@ -1,4 +1,6 @@
 let playerName;
+let gameEnded = false;
+
 function setupMultiplayerListeners(socket, playerName) {
   socket.on("playerConnected", (players) => {
     console.log("Players:", players);
@@ -11,6 +13,7 @@ function setupMultiplayerListeners(socket, playerName) {
       isPlay = true;
       score = 0;
       lives = 3;
+      gameEnded = false;
       loop();
     }
   });
@@ -24,28 +27,13 @@ function setupMultiplayerListeners(socket, playerName) {
   });
 
   socket.on("gameOver", (losingPlayerName) => {
-    if (losingPlayerName !== playerName) {
-      Swal.fire({
-        title: 'Congratulations!',
-        text: 'You won!',
-        icon: 'success',
-        confirmButtonText: 'Play Again'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
-      });
-    } else {
-      Swal.fire({
-        title: 'Game Over',
-        text: 'You lost! Better luck next time',
-        icon: 'error',
-        confirmButtonText: 'Try Again'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
-      });
+    if (!gameEnded) {
+      gameEnded = true;
+      if (losingPlayerName !== playerName) {
+        showGameOverAlert('You won!', 'Congratulations!', 'success');
+      } else {
+        showGameOverAlert('You lost!', 'Game Over', 'error');
+      }
     }
   });
 
@@ -54,18 +42,25 @@ function setupMultiplayerListeners(socket, playerName) {
   });
 
   socket.on("playerDisconnected", (disconnectedPlayerName) => {
-    gameOver();
-    if (disconnectedPlayerName !== playerName) {
-      Swal.fire({
-        title: "You Won!",
-        text: "The other player has disconnected.",
-        icon: "success",
-        confirmButtonText: "OK"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
-      });
+    if (!gameEnded) {
+      gameEnded = true;
+      gameOver();
+      if (disconnectedPlayerName !== playerName) {
+        showGameOverAlert('You won!', 'The other player has disconnected.', 'success');
+      }
+    }
+  });
+}
+
+function showGameOverAlert(title, text, icon) {
+  Swal.fire({
+    title: title,
+    text: text,
+    icon: icon,
+    confirmButtonText: 'Play Again'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.reload();
     }
   });
 }
