@@ -22,25 +22,29 @@ function startBotGame(suggestion) {
 
 function showPlayWithBothSuggestion() {
   let loadingMsg = select("#loadingMsg");
-  if (loadingMsg) loadingMsg.remove();
-
-  Swal.fire({
-    title: 'No player found',
-    text: 'Would you like to start a game with Bot?',
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, start with Bot',
-    cancelButtonText: 'No, cancel'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      startBotGame(true);
-    } else {
-      // Handle cancellation (e.g., return to main menu)
-      // You might want to add some code here to reset the game state or show the main menu
-    }
-  });
+  
+  if (loadingMsg) {
+    loadingMsg.remove();
+    
+    Swal.fire({
+      title: 'No player found',
+      text: 'Would you like to start a game with Bot?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, start with Bot',
+      cancelButtonText: 'No, cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        startBotGame(true);
+      } else {
+        // Handle cancellation (e.g., return to main menu)
+        // You might want to add some code here to reset the game state or show the main menu
+      }
+    });
+  }
+  // If loadingMsg doesn't exist, the function will do nothing
 }
 
 const showMainMenu = () => {
