@@ -40,6 +40,7 @@ function showPlayWithBothSuggestion() {
         startBotGame(true);
       } else {
         // Handle cancellation (e.g., return to main menu)
+        location.reload();
         // You might want to add some code here to reset the game state or show the main menu
       }
     });

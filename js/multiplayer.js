@@ -70,6 +70,7 @@ function showGameOverAlert(title, text, icon) {
       ${text}<br><br>
       Your score: ${score}<br>
       Opponent's score: ${opponentScore}
+
     `,
     icon: icon,
     confirmButtonText: 'Play Again'

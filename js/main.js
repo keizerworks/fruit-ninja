@@ -580,7 +580,10 @@ function gameOver(winner) {
   }
 
   lives = 0;
-  if (isMultiplayer) socket.emit("gameOver", playerName);
+  if (isMultiplayer) {socket.emit("gameOver", playerName);
+    opponentScore = opponentState.score
+
+  }
 
   setTimeout(() => location.reload(), 2000);
 }
