@@ -288,13 +288,37 @@ function game() {
   if (isPlayWithBot) {
     let spectateBtn = document.getElementById("spectateBtn");
     if (!spectateBtn) {
-      spectateBtn = document.createElement("button");
+      const spectateBtn = document.createElement("button");
       spectateBtn.id = "spectateBtn";
       spectateBtn.innerText = "Spectate";
       spectateBtn.style.position = "absolute";
-      spectateBtn.style.top = "30px";
+      spectateBtn.style.top = "75px";
+      spectateBtn.style.marginTop = "40px";
+
       spectateBtn.style.right = "10px";
+      
+      // Style the button
+      spectateBtn.style.padding = "10px 20px";
+      spectateBtn.style.border = "2px solid #8B4513"; // Dark brown border to match the wooden background
+      spectateBtn.style.borderRadius = "15px"; // Rounded corners for a more polished look
+      spectateBtn.style.backgroundColor = "#FFA500"; // Bright orange color for a fruit-like appearance
+      spectateBtn.style.color = "#fff"; // White text for good contrast
+      spectateBtn.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"; // A clean and modern font
+      spectateBtn.style.fontSize = "16px";
+      spectateBtn.style.cursor = "pointer";
+      spectateBtn.style.boxShadow = "0px 4px 6px rgba(0, 0, 0, 0.3)"; // Subtle shadow for depth
+      
+      // Add a hover effect
+      spectateBtn.addEventListener("mouseover", () => {
+        spectateBtn.style.backgroundColor = "#FF8C00"; // Darker orange on hover
+      });
+      
+      spectateBtn.addEventListener("mouseout", () => {
+        spectateBtn.style.backgroundColor = "#FFA500"; // Revert to original color
+      });
+      
       document.body.appendChild(spectateBtn);
+
 
       spectateBtn.addEventListener("click", () => {
         isSpectating = !isSpectating;
