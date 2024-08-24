@@ -540,11 +540,20 @@ function gameOver(winner) {
   // Detect screen size
 
   // Set dimensions based on screen size
-  const imgWidth = isMobile ? 150 : 490;
-  const imgHeight = isMobile ? 20 : 85;
+  const canvasWidth = width;
+  const canvasHeight = height;
 
-  // Display the image with the appropriate dimensions
-  image(this.gameOverImg, 155, 260, imgWidth, imgHeight);
+  // Calculate the image dimensions based on the canvas size
+  const imgWidth = min(canvasWidth * 0.8, 490); // Max width of 490, or 80% of canvas width
+  const imgHeight = imgWidth * (85 / 490); // Maintain aspect ratio
+
+  // Calculate the position to center the image
+  const imgX = (canvasWidth - imgWidth) / 2;
+  const imgY = (canvasHeight - imgHeight) / 2;
+
+  // Display the image at the calculated position and size
+  image(this.gameOverImg, imgX, imgY, imgWidth, imgHeight);
+
 
   if (isPlayWithBot) {
     if (winner === "bot") {
