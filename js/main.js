@@ -344,15 +344,16 @@ function game() {
           console.log("Bot lost a life. Lives left:", botlives);
         }
 
-        if (Math.random() < 0.05) {
-          // 5% chance to increase points
-          botpoints += Math.floor(Math.random() * 10) + 1; // Increase by 1 to 10 points
-          console.log("Bot gained points. Points:", botpoints);
-        }
+        // if (Math.random() < 0.05) {
+        //   // 5% chance to increase points
+        //   botPoints += Math.floor(Math.random() * 3) + 1; // Increase by 1 to 3 points
+
+        //   console.log("Bot gained points. Points:", botpoints);
+        // }
 
         if (Math.random() < 0.05) {
           // 5% chance to increase score
-          botscore += Math.floor(Math.random() * 8) + 1; // Increase by 1 to 10 score
+          botscore += Math.floor((Math.floor(Math.random() * 1) + 1)/100); // Increase by 1 to 10 score
           console.log("Bot gained score. Score:", botscore);
         }
 
