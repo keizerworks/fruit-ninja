@@ -351,11 +351,11 @@ function game() {
         //   console.log("Bot gained points. Points:", botpoints);
         // }
 
-        if (Math.random() < 0.05) {
-          // 5% chance to increase score
-          botscore += Math.floor((Math.floor(Math.random() * 1) + 1)/100); // Increase by 1 to 10 score
-          console.log("Bot gained score. Score:", botscore);
-        }
+        // if (Math.random() < 0.05) {
+        //   // 5% chance to increase score
+        //   botscore += Math.floor((Math.floor(Math.random() * 1) + 1)/100); // Increase by 1 to 10 score
+        //   console.log("Bot gained score. Score:", botscore);
+        // }
 
         // Check if lives are zero and trigger gameOver
         if (botlives <= 0) {
@@ -432,6 +432,7 @@ function drawBotPOV() {
       }
       if (botlives < 1) {
         if (isPlayWithBot) gameOver("player");
+        botpoints = botscore;
         gameOver();
       }
       fruit.splice(i, 1);
@@ -445,7 +446,8 @@ function drawBotPOV() {
       if (sword.checkSlice(fruit[i]) && fruit[i].name != "boom") {
         spliced.play();
         showSplash(fruit[i].name, fruit[i].x, fruit[i].y);
-        botpoints++;
+        // botpoints++;
+        botscore++;
         fruit[i].update();
         fruit[i].draw();
       }
@@ -530,7 +532,10 @@ function drawScore(score) {
   textSize(50);
   text(score, 50, 50);
 }
-
+function singlegameOver(score1, score2){
+  return max(score1,score2);
+  // TODO winning logic redfine 
+}
 function gameOver(winner) {
   isPlay = false;
   noLoop();
