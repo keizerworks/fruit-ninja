@@ -94,39 +94,42 @@ function setup() {
   // Create singleplayer button
   let singleplayerBtn = createButton("");
   singleplayerBtn.id("singleplayerBtn");
-  singleplayerBtn.style("background", "url(images/Start_icon.png) no-repeat center");
+  singleplayerBtn.style(
+    "background",
+    "url(images/Start_icon.png) no-repeat center"
+  );
   singleplayerBtn.style("background-size", "contain");
   singleplayerBtn.style("border", "none");
   singleplayerBtn.style("padding", "0");
   singleplayerBtn.style("cursor", "pointer");
   singleplayerBtn.mousePressed(startSingleplayer);
-  
+
   // Responsive positioning and sizing
   singleplayerBtn.style("position", "fixed");
   singleplayerBtn.style("right", "10px");
   singleplayerBtn.style("bottom", "20px");
-  
+
   // Base size for most screens
   singleplayerBtn.style("width", "clamp(100px, 20vw, 400px)");
   singleplayerBtn.style("height", "clamp(100px, 20vw, 400px)");
-  
-  // Adjust size for larger screens
 
-  
+  // Adjust size for larger screens
 
   // Create multiplayer button
   let multiplayerBtn = createButton("");
   multiplayerBtn.id("multiplayerBtn");
   // multiplayerBtn.position(300, 150);
   // multiplayerBtn.size(500, 500);
-multiplayerBtn.style("background", "url(images/Multiplayer_Icon.png) no-repeat center");
-multiplayerBtn.style("background-size", "contain");
-multiplayerBtn.style("background-size", "contain");
+  multiplayerBtn.style(
+    "background",
+    "url(images/Multiplayer_Icon.png) no-repeat center"
+  );
+  multiplayerBtn.style("background-size", "contain");
+  multiplayerBtn.style("background-size", "contain");
   multiplayerBtn.style("border", "none");
   multiplayerBtn.style("padding", "0");
   multiplayerBtn.style("cursor", "pointer");
 
-  
   // Responsive positioning and sizing
   multiplayerBtn.style("position", "fixed");
   multiplayerBtn.style("left", "10px");
@@ -191,14 +194,10 @@ function showSearchingState() {
   loadingMsg.style("font-weight", "bold");
 
   // Create a timer
-  let timer = 5;
-  let timerInterval = setInterval(() => {
-    timer--;
-    if (timer <= 0) {
-      clearInterval(timerInterval);
-      showPlayWithBothSuggestion();
-    }
-  }, 1000);
+
+  // let timerInterval = setTimeout(() => {
+  //     showPlayWithBothSuggestion();
+  // }, 5000);
 }
 
 function check() {
@@ -287,6 +286,9 @@ function game() {
   }
   if (isPlayWithBot) {
     let spectateBtn = document.getElementById("spectateBtn");
+
+    // var finalTime = new Date().getTime();
+    // console.error(finalTime - initTime);
     if (!spectateBtn) {
       const spectateBtn = document.createElement("button");
       spectateBtn.id = "spectateBtn";
@@ -296,36 +298,35 @@ function game() {
       spectateBtn.style.marginTop = "40px";
 
       spectateBtn.style.right = "10px";
-      
+
       // Style the button
       spectateBtn.style.padding = "10px 20px";
       spectateBtn.style.border = "2px solid #8B4513"; // Dark brown border to match the wooden background
       spectateBtn.style.borderRadius = "15px"; // Rounded corners for a more polished look
       spectateBtn.style.backgroundColor = "#FFA500"; // Bright orange color for a fruit-like appearance
       spectateBtn.style.color = "#fff"; // White text for good contrast
-      spectateBtn.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"; // A clean and modern font
+      spectateBtn.style.fontFamily =
+        "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"; // A clean and modern font
       spectateBtn.style.fontSize = "16px";
       spectateBtn.style.cursor = "pointer";
       spectateBtn.style.boxShadow = "0px 4px 6px rgba(0, 0, 0, 0.3)"; // Subtle shadow for depth
-      
+
       // Add a hover effect
       spectateBtn.addEventListener("mouseover", () => {
         spectateBtn.style.backgroundColor = "#FF8C00"; // Darker orange on hover
       });
-      
+
       spectateBtn.addEventListener("mouseout", () => {
         spectateBtn.style.backgroundColor = "#FFA500"; // Revert to original color
       });
-      
-      document.body.appendChild(spectateBtn);
 
+      document.body.appendChild(spectateBtn);
 
       spectateBtn.addEventListener("click", () => {
         isSpectating = !isSpectating;
         if (isSpectating) {
           spectateBtn.innerText = "Return";
-          document.getElementById("defaultCanvas0").style.border =
-            "none";
+          document.getElementById("defaultCanvas0").style.border = "none";
         } else {
           spectateBtn.innerText = "Spectate";
           document.getElementById("defaultCanvas0").style.border = "none";
@@ -333,7 +334,8 @@ function game() {
       });
 
       if (!isSpectating) {
-        botscore = 0;
+        const botScores = [3, 5, 8, 11, 7];
+        botscore = botScores[Math.floor(Math.random() * botScores.length)];
         botlives = 3;
         botpoints = 0;
 
@@ -446,7 +448,7 @@ function drawBotPOV() {
       if (sword.checkSlice(fruit[i]) && fruit[i].name != "boom") {
         spliced.play();
         showSplash(fruit[i].name, fruit[i].x, fruit[i].y);
-        // botpoints++;
+        // botpoints++; FUCKS UP THE Points into 100's
         botscore++;
         fruit[i].update();
         fruit[i].draw();
@@ -532,9 +534,9 @@ function drawScore(score) {
   textSize(50);
   text(score, 50, 50);
 }
-function singlegameOver(score1, score2){
-  return max(score1,score2);
-  // TODO winning logic redfine 
+function singlegameOver(score1, score2) {
+  return max(score1, score2);
+  // TODO winning logic redfine
 }
 function gameOver(winner) {
   isPlay = false;
@@ -560,15 +562,15 @@ function gameOver(winner) {
 
   if (isPlayWithBot) {
     let title, text, icon;
-    
+
     if (winner === "bot") {
-      title = 'Game Over!';
-      text = 'Bot Won the game';
-      icon = 'info';
+      title = "Game Over!";
+      text = "Bot Won the game";
+      icon = "info";
     } else if (winner === "player") {
-      title = 'Congratulations!';
-      text = 'You Won the game';
-      icon = 'success';
+      title = "Congratulations!";
+      text = "You Won the game";
+      icon = "success";
     }
 
     Swal.fire({
@@ -579,16 +581,16 @@ function gameOver(winner) {
         Bot's score: ${botscore}
       `,
       icon: icon,
-      confirmButtonText: 'OK'
+      confirmButtonText: "OK",
     });
 
     isPlayWithBot = false;
   }
 
   lives = 0;
-  if (isMultiplayer) {socket.emit("gameOver", playerName);
-    opponentScore = opponentState.score
-
+  if (isMultiplayer) {
+    socket.emit("gameOver", playerName);
+    opponentScore = opponentState.score;
   }
 
   setTimeout(() => location.reload(), 2000);

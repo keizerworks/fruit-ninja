@@ -2,8 +2,11 @@ let bot;
 var botscore = 0;
 var botlives = 3;
 var botpoints = 0;
+document.getElementById("temp").addEventListener("click", showPlayWithBothSuggestion());
+
 
 function startBotGame(suggestion) {
+  // var initTime = new Date().getTime();
   isPlay = true;
   isPlayWithBot = true;
   start.play();
@@ -22,6 +25,7 @@ function startBotGame(suggestion) {
 
 function showPlayWithBothSuggestion() {
   let loadingMsg = select("#loadingMsg");
+
   
   if (loadingMsg) {
     loadingMsg.remove();
@@ -44,6 +48,10 @@ function showPlayWithBothSuggestion() {
         // You might want to add some code here to reset the game state or show the main menu
       }
     });
+  }else{
+  
+    console.log("Loading msg not found");
+    startBotGame(true);
   }
   // If loadingMsg doesn't exist, the function will do nothing
 }
