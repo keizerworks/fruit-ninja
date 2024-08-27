@@ -94,10 +94,9 @@ function setup() {
   // Create singleplayer button
   let singleplayerBtn = createButton("");
   singleplayerBtn.id("singleplayerBtn");
-  singleplayerBtn.style(
-    "background",
-    "url(images/Start_icon.png) no-repeat center"
-  );
+
+  singleplayerBtn.style("background", "url(images/Start_icon.png) no-repeat center");
+
   singleplayerBtn.style("background-size", "contain");
   singleplayerBtn.style("border", "none");
   singleplayerBtn.style("padding", "0");
@@ -183,6 +182,7 @@ function showGameModePopup() {
 function showSearchingState() {
   // Hide the game canvas
   cnv.style("display", "none");
+  const queryString = window.location.search;
 
   // Create a loading message
   let loadingMsg = createP("Searching for a player...");
@@ -192,6 +192,22 @@ function showSearchingState() {
   loadingMsg.style("margin-top", "50px");
   loadingMsg.style("color", "white");
   loadingMsg.style("font-weight", "bold");
+
+  const urlParams = new URLSearchParams(queryString);
+  const player1Id = urlParams.get('player1Id');
+
+  if (player1Id.startsWith('a99') || player1Id.startsWith('b99')) {
+    // alert()
+    loadingMsg.remove();
+    startBotGame(true);
+    return;
+     // Stop further execution
+  } 
+
+  // Initialize the socket and set up multiplayer listeners
+  else{
+    setupMultiplayerListeners(socket, playerName);
+    loop();} 
 
   // Create a timer
 
@@ -442,8 +458,9 @@ function drawBotPOV() {
       if (fruit[i].sliced && fruit[i].name == "boom") {
         boom.play();
         if (isPlayWithBot) gameOver("player");
-        if (isMultiplayer) socket.emit("gameOver", playerName);
-        gameOver();
+if (isMultiplayer) {
+          socket.emit("gameOver", { loser: playerName, roomId: currentRoom });
+        }        gameOver();
       }
       if (sword.checkSlice(fruit[i]) && fruit[i].name != "boom") {
         spliced.play();
@@ -463,6 +480,24 @@ function drawBotPOV() {
   botscore += botpoints;
   drawScore(botpoints);
   drawLives(botlives);
+
+
+  if (isMultiplayer) {
+    socket.emit("updateBotState", {
+      score: botscore,
+      lives: botlives,
+      swordX: botX,
+      swordY: botY,
+      fruits: fruit.map((f) => ({
+        name: f.name,
+        x: f.x,
+        y: f.y,
+        visible: f.visible,
+        sliced: f.sliced,
+      })),
+      roomId: currentRoom,
+    });
+  }
 }
 
 let splashTimer = 6000; // Adjust this value to change the display duration
@@ -589,12 +624,50 @@ function gameOver(winner) {
 
   lives = 0;
   if (isMultiplayer) {
-    socket.emit("gameOver", playerName);
+    socket.emit("gameOver", { loser: playerName, roomId: currentRoom });
     opponentScore = opponentState.score;
+
+    socket.emit("leaveRoom", { roomId: currentRoom });
   }
 
-  setTimeout(() => location.reload(), 2000);
+  setTimeout(() => {
+    if (isMultiplayer) {
+      // Instead of reloading, reset the game state and wait for a new opponent
+      resetGameState();
+      socket.emit("waitForOpponent");
+    } else {
+      location.reload();
+      const currentUrl = window.location.href;
+
+    // Remove all searchParams from the URL
+    const cleanedUrl = currentUrl.split('?')[0];
+
+    // Redirect to the cleaned URL
+    window.location.href = cleanedUrl;
+    }
+  }, 2000);
 }
+
+function resetGameState() {
+  // Reset all game variables here
+  score = 0;
+  lives = 3;
+  fruit = [];
+  // ... reset any other necessary variables
+
+  // Clear the canvas
+  clear();
+  background(bg);
+
+  // Display a "Waiting for opponent" message
+  textAlign(CENTER, CENTER);
+  textSize(32);
+  fill(255);
+  text("Waiting for opponent...", width/2, height/2);
+}
+
+
+
 
 function sketch2(p) {
   let prevX = null;
