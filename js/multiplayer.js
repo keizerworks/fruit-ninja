@@ -83,7 +83,7 @@ function setupMultiplayerListeners(socket, playerName) {
   socket.on("gameOver", (data) => {
     if (!gameEnded && data.roomId === currentRoom) {
       gameEnded = true;
-      alert("inside function");
+      
       console.error("data is" ,JSON.stringify(data));
       if (score > opponentScore) {
         showGameOverAlert('You won!', 'Congratulations!', 'success');
