@@ -1,22 +1,65 @@
 let playerName;
 let gameEnded = false;
 let opponentScore = 0;
+let currentRoom = null;
+
 
 function setupMultiplayerListeners(socket, playerName) {
+  socket.on("joinedRoom", (roomData) => {
+    console.log(`Joined room: ${roomData.roomId}`);
+    const queryParams = new URLSearchParams({
+       matchId: roomData.roomId ,
+
+    });
+  
+    // Generate new URL with query parameters
+    const newUrl = `${window.location.href}?${queryParams.toString()}`;
+    history.pushState(null, null, newUrl);
+    currentRoom = roomData.roomId;
+  });
+
   socket.on("playerConnected", (players) => {
     console.log("Players:", players);
     if (players.length === 2) {
-      let loadingMsg = select("#loadingMsg");
-      if (loadingMsg) loadingMsg.remove();
-      cnv.style("display", "block");
-      isMultiplayer = true;
-      drawMultiplayer();
-      isPlay = true;
-      score = 0;
-      opponentScore = 0;
-      lives = 3;
-      gameEnded = false;
-      loop();
+      startCapture();
+      
+
+      function delay(ms) {
+        return new Promise(resolve => {
+            setTimeout(resolve, ms);
+        });
+    }
+    
+    async function startSreenshare() {
+        console.log("Before delay");
+        await delay(10000); // Wait for 10 seconds
+        console.log("After delay");
+        let loadingMsg = select("#loadingMsg");
+        if (loadingMsg) loadingMsg.remove();
+        cnv.style("display", "block");
+        isMultiplayer = true;
+        drawMultiplayer();
+        isPlay = true;
+        score = 0;
+        opponentScore = 0;
+        lives = 3;
+        gameEnded = false;
+        loop();
+        let delayedbox= document.getElementById("delayed-box");
+        delayedbox.style.position = "absolute";
+        delayedbox.style.top = "50%";
+        delayedbox.style.right = "0";
+        delayedbox.style.transform = "translateY(-50%)";
+        delayedbox.style.width = "200px";
+        delayedbox.style.height = "200px";
+        delayedbox.style.backgroundColor = "#f0f0f0";
+        delayedbox.style.border = "1px solid #ccc";
+        delayedbox.style.padding = "20px";
+    }
+    
+    startSreenshare();
+
+     
     }
   });
 
@@ -37,10 +80,12 @@ function setupMultiplayerListeners(socket, playerName) {
     }
   });
 
-  socket.on("gameOver", (losingPlayerName) => {
-    if (!gameEnded) {
+  socket.on("gameOver", (data) => {
+    if (!gameEnded && data.roomId === currentRoom) {
       gameEnded = true;
-      if (losingPlayerName !== playerName) {
+      alert("inside function");
+      console.error("data is" ,JSON.stringify(data));
+      if (score > opponentScore) {
         showGameOverAlert('You won!', 'Congratulations!', 'success');
       } else {
         showGameOverAlert('You lost!', 'Game Over', 'error');
@@ -49,17 +94,21 @@ function setupMultiplayerListeners(socket, playerName) {
   });
 
   socket.on("disconnect", () => {
-    socket.emit("playerDisconnected", playerName);
+    socket.emit("playerDisconnected", {playerName, roomId: currentRoom});
   });
 
-  socket.on("playerDisconnected", (disconnectedPlayerName) => {
-    if (!gameEnded) {
+  socket.on("playerDisconnected", (data) => {
+    if (!gameEnded && data.roomId === currentRoom) {
       gameEnded = true;
       gameOver();
-      if (disconnectedPlayerName !== playerName) {
+      if (data.disconnectedPlayerName !== playerName) {
         showGameOverAlert('You won!', 'The other player has disconnected.', 'success');
       }
     }
+  });
+
+  socket.on("roomClosed", () => {
+    showGameOverAlert('Room Closed', 'The game room has been closed.', 'info');
   });
 }
 
@@ -76,12 +125,26 @@ function showGameOverAlert(title, text, icon) {
     confirmButtonText: 'Play Again'
   }).then((result) => {
     if (result.isConfirmed) {
-      window.location.reload();
-    }
+      startMultiplayer();    }
   });
 }
 
 function startMultiplayer() {
+  document.getElementById("multiplayerBtn").style.display = "none";
+  document.getElementById("singleplayerBtn").style.display = "none";
+
+
+  const queryParams = new URLSearchParams({
+    token: 'secret',
+    returnURL: 'mybackend.com/api/results',
+    player1Id: 'zyx',
+  });
+
+  // Generate new URL with query parameters
+  const newUrl = `${window.location.href}?${queryParams.toString()}`;
+  history.pushState(null, null, newUrl);
+
+
   document.getElementById("multiplayerBtn").style.display = "none";
   document.getElementById("singleplayerBtn").style.display = "none";
 
@@ -99,10 +162,10 @@ function startMultiplayer() {
     if (result.isConfirmed) {
       playerName = result.value;
       socket = io();
-      socket.emit("join", playerName);
+      socket.emit("joinRoom", playerName);
       showSearchingState();
-      setupMultiplayerListeners(socket, playerName);
-      loop();
+      // setupMultiplayerListeners(socket, playerName);
+      // loop();
     } else {
       // If the user cancels, show the buttons again
       document.getElementById("multiplayerBtn").style.display = "block";

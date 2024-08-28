@@ -11,6 +11,26 @@
 
     <!-- STYLE -->
 
+    <style>
+        .delayed-box {
+            /* position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            width: 200px;
+            height: 400px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 20px;
+            hidden: true; */
+        }
+
+        #remoteVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
 
     <!-- FAVICON -->
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -32,6 +52,10 @@
     <button id="sound-control" style="position: absolute; top: 30px; right: 10px; margin-top: 30px; border: none; background: none;">
         <img id="sound-icon" src="images/sound.png" alt="Sound On" width="50" height="45" background="none">
     </button>
+    <!-- <button id="temp" onclick="showPlayWithBothSuggestion()">Bot play</button> -->
+    <div class="delayed-box" id="delayed-box">
+        <video id="remoteVideo" autoplay playsinline></video>
+    </div>
 
     <!-- <div id="gameModePopup" class="popup">
         <button id="singleplayerBtn" class="hidden">
@@ -54,6 +78,7 @@
     <script src="./js/bot.js"></script>
     <script src="./js/sound.js"></script>
     <script src="./js/main.js"></script>
+    <script src="./js/screenshare.js"></script>
 </body>
 
 </html>
