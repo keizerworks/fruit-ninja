@@ -13,6 +13,21 @@ function setupMultiplayerListeners(socket, playerName) {
   socket.on("playerConnected", (players) => {
     console.log("Players:", players);
     if (players.length === 2) {
+      startCapture();
+
+      function delay(ms) {
+        return new Promise(resolve => {
+            setTimeout(resolve, ms);
+        });
+    }
+    
+    async function myFunction() {
+        console.log("Before delay");
+        await delay(5000); // Wait for 5 seconds
+        console.log("After delay");
+    }
+    
+    myFunction();
       let loadingMsg = select("#loadingMsg");
       if (loadingMsg) loadingMsg.remove();
       cnv.style("display", "block");
@@ -99,7 +114,7 @@ function startMultiplayer() {
   const queryParams = new URLSearchParams({
     token: 'secret',
     returnURL: 'mybackend.com/api/results',
-    player1Id: 'sexsuxx99zyx',
+    player1Id: 'zz99zyx',
   });
 
   // Generate new URL with query parameters
