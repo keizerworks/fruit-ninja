@@ -7,6 +7,14 @@ let currentRoom = null;
 function setupMultiplayerListeners(socket, playerName) {
   socket.on("joinedRoom", (roomData) => {
     console.log(`Joined room: ${roomData.roomId}`);
+    const queryParams = new URLSearchParams({
+       matchId: roomData.roomId ,
+
+    });
+  
+    // Generate new URL with query parameters
+    const newUrl = `${window.location.href}?${queryParams.toString()}`;
+    history.pushState(null, null, newUrl);
     currentRoom = roomData.roomId;
   });
 
@@ -14,6 +22,7 @@ function setupMultiplayerListeners(socket, playerName) {
     console.log("Players:", players);
     if (players.length === 2) {
       startCapture();
+      
 
       function delay(ms) {
         return new Promise(resolve => {
@@ -21,24 +30,36 @@ function setupMultiplayerListeners(socket, playerName) {
         });
     }
     
-    async function myFunction() {
+    async function startSreenshare() {
         console.log("Before delay");
-        await delay(5000); // Wait for 5 seconds
+        await delay(10000); // Wait for 10 seconds
         console.log("After delay");
+        let loadingMsg = select("#loadingMsg");
+        if (loadingMsg) loadingMsg.remove();
+        cnv.style("display", "block");
+        isMultiplayer = true;
+        drawMultiplayer();
+        isPlay = true;
+        score = 0;
+        opponentScore = 0;
+        lives = 3;
+        gameEnded = false;
+        loop();
+        let delayedbox= document.getElementById("delayed-box");
+        delayedbox.style.position = "absolute";
+        delayedbox.style.top = "50%";
+        delayedbox.style.right = "0";
+        delayedbox.style.transform = "translateY(-50%)";
+        delayedbox.style.width = "200px";
+        delayedbox.style.height = "200px";
+        delayedbox.style.backgroundColor = "#f0f0f0";
+        delayedbox.style.border = "1px solid #ccc";
+        delayedbox.style.padding = "20px";
     }
     
-    myFunction();
-      let loadingMsg = select("#loadingMsg");
-      if (loadingMsg) loadingMsg.remove();
-      cnv.style("display", "block");
-      isMultiplayer = true;
-      drawMultiplayer();
-      isPlay = true;
-      score = 0;
-      opponentScore = 0;
-      lives = 3;
-      gameEnded = false;
-      loop();
+    startSreenshare();
+
+     
     }
   });
 
@@ -62,7 +83,9 @@ function setupMultiplayerListeners(socket, playerName) {
   socket.on("gameOver", (data) => {
     if (!gameEnded && data.roomId === currentRoom) {
       gameEnded = true;
-      if (data.loser !== playerName) {
+      alert("inside function");
+      console.error("data is" ,JSON.stringify(data));
+      if (score > opponentScore) {
         showGameOverAlert('You won!', 'Congratulations!', 'success');
       } else {
         showGameOverAlert('You lost!', 'Game Over', 'error');
@@ -114,7 +137,7 @@ function startMultiplayer() {
   const queryParams = new URLSearchParams({
     token: 'secret',
     returnURL: 'mybackend.com/api/results',
-    player1Id: 'zz99zyx',
+    player1Id: 'zyx',
   });
 
   // Generate new URL with query parameters

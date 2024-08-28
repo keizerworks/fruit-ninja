@@ -34,7 +34,7 @@ const signalingServerUrl = "ws://localhost:8080";
 const signalingSocket = new WebSocket(signalingServerUrl);
 
 signalingSocket.onopen = () => {
-  console.log("WebSocket connection established");
+  
 };
 
 signalingSocket.onmessage = async (event) => {
@@ -44,45 +44,36 @@ signalingSocket.onmessage = async (event) => {
     messageData =
       event.data instanceof Blob ? await event.data.text() : event.data;
     const data = JSON.parse(messageData);
-    console.log("Received message:", data);
+
 
     switch (data.type) {
       case "offer":
-        console.log("Handling offer");
+      
         await handleOffer(data.offer);
         break;
       case "answer":
-        console.log("Handling answer");
+    
         await handleAnswer(data.answer);
         break;
       case "ice-candidate":
-        console.log("Handling ICE candidate");
+ 
         await handleIceCandidate(data.candidate);
         break;
       case "ready":
-        console.log("Peer is ready");
+ 
         isInitiator = true;
         break;
       default:
-        console.warn("Unknown message type:", data.type);
     }
   } catch (err) {
-    console.error("Error processing message:", err);
-    console.log("Problematic message:", messageData);
+   
   }
 };
 
 // startElem.addEventListener("click", startCapture, false);
 // stopElem.addEventListener("click", stopCapture, false);
 
-console.log = (msg) => {
-//   logElem.textContent += `${msg}\n`;
-  console.info(msg);
-};
-console.error = (msg) => {
-//   logElem.textContent += `Error: ${msg}\n`;
-//   console.error(msg);
-};
+
 
 async function startCapture() {
 //   logElem.textContent = "";
@@ -97,14 +88,13 @@ async function startCapture() {
       setupWebRTC();
     } else {
       signalingSocket.onopen = () => {
-        console.log("WebSocket connection established");
+       
         setupWebRTC();
       };
     }
 
     dumpOptionsInfo();
   } catch (err) {
-    console.error(err);
   }
 }
 
@@ -125,20 +115,11 @@ function stopCapture() {
 }
 
 function dumpOptionsInfo() {
-//   if (!localVideo.srcObject) return;
-//   const videoTrack = localVideo.srcObject.getVideoTracks()[0];
-//   console.log(
-//     "Track settings:",
-//     JSON.stringify(videoTrack.getSettings(), null, 2)
-//   );
-//   console.log(
-//     "Track constraints:",
-//     JSON.stringify(videoTrack.getConstraints(), null, 2)
-//   );
+
 }
 
 function setupWebRTC() {
-  console.log("Setting up WebRTC connection");
+
   peerConnection = new RTCPeerConnection(config);
 
   localStream.getTracks().forEach((track) => {
@@ -146,7 +127,7 @@ function setupWebRTC() {
   });
 
   peerConnection.onicecandidate = (event) => {
-    console.log("New ICE candidate:", event.candidate);
+
     if (event.candidate) {
       signalingSocket.send(
         JSON.stringify({
@@ -155,36 +136,35 @@ function setupWebRTC() {
         })
       );
     } else {
-      console.log("ICE gathering completed");
+
     }
   };
 
   peerConnection.oniceconnectionstatechange = () => {
-    console.log("ICE connection state:", peerConnection.iceConnectionState);
+    
   };
 
   peerConnection.onsignalingstatechange = () => {
-    console.log("Signaling state:", peerConnection.signalingState);
+
   };
 
   peerConnection.ontrack = (event) => {
     if (event.streams && event.streams[0]) {
-      console.log("Received remote stream");
+
       if (remoteVideo) {
         remoteVideo.srcObject = event.streams[0];
       } else {
-        console.error("Remote video element not found");
-      }
+             }
     } else {
-      console.error("No streams found in the event");
+     
     }
   };
 
   if (isInitiator) {
-    console.log("Creating offer as initiator");
+  
     createAndSendOffer();
   } else {
-    console.log("Waiting for offer as non-initiator");
+   
     signalingSocket.send(JSON.stringify({ type: "ready" }));
   }
 }
@@ -193,15 +173,14 @@ async function createAndSendOffer() {
   try {
     const offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);
-    console.log("Sending offer");
-    signalingSocket.send(
+        signalingSocket.send(
       JSON.stringify({
         type: "offer",
         offer: peerConnection.localDescription,
       })
     );
   } catch (error) {
-    console.error("Error in offer creation and sending:", error);
+    
   }
 }
 
@@ -221,13 +200,12 @@ async function handleOffer(offer) {
       })
     );
   } catch (error) {
-    console.error("Failed to handle offer:", error);
+   
   }
 }
 
 async function handleAnswer(answer) {
   if (!peerConnection) {
-    console.error("PeerConnection not established.");
     return;
   }
 
@@ -236,22 +214,17 @@ async function handleAnswer(answer) {
       new RTCSessionDescription(answer)
     );
   } catch (error) {
-    console.error("Failed to set remote description:", error);
   }
 }
 
 async function handleIceCandidate(candidateData) {
   if (!peerConnection) {
-    console.error("PeerConnection not established.");
     return;
   }
 
   try {
     const candidate = new RTCIceCandidate(candidateData);
     await peerConnection.addIceCandidate(candidate);
-    console.log("ICE candidate added successfully");
   } catch (error) {
-    console.error("Error adding ICE candidate:", error);
-    console.log("Problematic candidate data:", candidateData);
   }
 }
